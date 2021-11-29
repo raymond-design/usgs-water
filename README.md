@@ -1,1 +1,1 @@
-work in progress
+# USGS Water Api Library
