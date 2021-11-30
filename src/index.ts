@@ -1,5 +1,2 @@
-class WaterObject {
-
-}
-
-export default WaterObject;
+//Main Api Object
+export { WaterObject } from './water-object';
