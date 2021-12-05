@@ -6,8 +6,9 @@ export function isValidMajorFilter(filterType: any, ...filter: any[]): boolean {
   if (!filter.length) {
     return false;
   }
-
-  filterType=filterType.toString().lowerCase();
+  console.log(typeof filter[0]);
+  console.log(filterType,filter);
+  filterType=filterType.toString().toLowerCase();
 
   switch (filterType) {
     case 'site': {
@@ -38,7 +39,9 @@ export function isValidMajorFilter(filterType: any, ...filter: any[]): boolean {
  */
 function isValidSite(filter: any[]): boolean {
   for (let i = 0; i < filter.length; i++) {
-    if (filter[i].length<8 || filter[i].length>15 || !/^-?\d+$/.test(filter[i].toString())){
+    console.log(typeof filter[i] !== 'number' || filter[i].length<8 || filter[i].length>15);
+    console.log(typeof filter[i]);
+    if (typeof filter[i] !== 'number' || filter[i].length<8 || filter[i].length>15){
       return false;
     }
   }
@@ -63,13 +66,46 @@ function isValidState(filter: any[]): boolean {
  * @returns 
  */
 function isValidHuc(filter: any[]): boolean {
-  return true
+  let majorHuc: number = 0;
+  let minorHuc: number = 0;
+  for (let i = 0; i < filter.length; i++) {
+    if (typeof filter[i] === 'number' && filter[i].length === 2) {
+      majorHuc++;
+    }
+    else if (typeof filter[i] === 'number' && filter[i].length === 8) {
+      minorHuc++;
+    }
+    else {
+      return false;
+    }
+  }
+  return majorHuc<=1 && minorHuc<=10;
 }
 
+/**
+ * 
+ * @param filter Array of client input values
+ * @returns Whether the input is in correct coordinates format
+ * Must be format: W,S,E,N
+ * 'the product of the range of latitude and longitude cannot exceed 25 degrees'
+ * longitude must be between -180 and 180
+ * latitude must be between -90 and 90
+ */
 function isValidCoord(filter: any[]): boolean {
-  return true
+  return filter.length === 4
+    && typeof filter[0] === 'number'
+    && typeof filter[1] === 'number'
+    && typeof filter[2] === 'number'
+    && typeof filter[3] === 'number'
+    && filter[0] < filter[2]
+    && filter[2] < 180
+    && filter[0] > -180
+    && filter[1] < filter[3]
+    && filter[3] < 90
+    && filter[1] > -90
+    && (filter[2]-filter[0])*(filter[3]-filter[1])<=25;
 }
 
 function isValidCounty(filter: any[]): boolean {
-  return true
+  return true;
 }
