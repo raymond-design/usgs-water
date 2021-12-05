@@ -1,5 +1,1 @@
-class WaterObject {
-
-}
-
-export default WaterObject;
+export { WaterObject } from './water-object';
